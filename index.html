@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fff4e9"><meta name="description" content="Daily Checker — atur aktivitas dan rutinitas harianmu.">
+<link rel="manifest" href="manifest.json">
+<title>Daily Checker</title>
+<style>
+:root{--bg:#fff8f0;--paper:#fffdf9;--cream:#ffefdf;--peach:#ffd8c2;--peach2:#ffbea0;--brown:#765443;--ink:#4d392f;--muted:#a58d7d;--line:#f1e3d6;--green:#8ca88a;--shadow:0 8px 24px #8b604015}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;padding-bottom:88px}
+header{padding:24px 20px 14px;background:linear-gradient(135deg,#fff2e6,#ffe6d8);border-radius:0 0 28px 28px}
+.top{display:flex;justify-content:space-between;align-items:center}.eyebrow{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}.brand{font-size:25px;font-weight:800;color:var(--brown);letter-spacing:-.8px}.date{margin-top:16px;font-size:14px;color:#947765}
+main{padding:18px 16px;max-width:650px;margin:auto}.hello{font-size:22px;font-weight:750;margin:2px 0 4px}.sub{color:var(--muted);font-size:13px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:21px;padding:16px;margin:14px 0;box-shadow:var(--shadow)}
+.progressrow{display:flex;align-items:center;gap:15px}.ring{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--peach2) var(--p,0%),#f5e9df 0);position:relative;flex:none}.ring:after{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--paper)}.ring b{z-index:1;font-size:17px}.muted{color:var(--muted);font-size:13px}.sectionhead{display:flex;align-items:center;justify-content:space-between;margin:22px 2px 8px}.sectionhead h2{font-size:17px;margin:0}.pill{background:var(--cream);color:var(--brown);border-radius:99px;padding:6px 10px;font-size:12px;border:0}
+.days{display:flex;gap:7px;overflow:auto;padding:4px 0 9px}.day{min-width:43px;padding:9px 5px;border:1px solid var(--line);border-radius:15px;background:var(--paper);color:var(--muted);text-align:center;font-size:12px}.day strong{display:block;font-size:15px;color:var(--ink)}.day.active{background:var(--peach);border-color:var(--peach2);color:var(--brown)}
+.item{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}.check{width:23px;height:23px;border:1.7px solid #d9bba8;border-radius:8px;appearance:none;flex:none;margin:0}.check:checked{background:var(--green);border-color:var(--green)}.check:checked:after{content:"✓";display:block;text-align:center;color:white;font-weight:800}.item.done .taskname{text-decoration:line-through;color:#b8a89c}.task{flex:1;min-width:0}.taskname{font-weight:650}.taskmeta{font-size:12px;color:var(--muted)}.time{font-size:12px;color:var(--brown);background:#fff2e8;padding:5px 8px;border-radius:10px}
+button{font:inherit;cursor:pointer}.primary{background:var(--brown);color:white;border:0;border-radius:14px;padding:11px 15px;font-weight:650}.secondary{background:var(--cream);color:var(--brown);border:0;border-radius:12px;padding:9px 12px}.fab{position:fixed;right:20px;bottom:90px;border:0;background:var(--brown);color:white;width:54px;height:54px;border-radius:18px;font-size:27px;box-shadow:0 7px 20px #76544344}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fffdf9ed;backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 5px calc(9px + env(safe-area-inset-bottom));z-index:5}nav button{border:0;background:none;color:var(--muted);font-size:11px;display:grid;gap:3px;justify-items:center}nav button span{font-size:20px}nav button.active{color:var(--brown);font-weight:750}
+.page{display:none}.page.active{display:block}.empty{text-align:center;padding:24px;color:var(--muted);font-size:13px}
+form label{display:block;font-size:13px;color:var(--muted);margin:12px 0 5px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:12px;background:#fffaf5;padding:12px;color:var(--ink);font:inherit}input[type=checkbox]{width:auto} .formactions{display:flex;gap:8px;margin-top:16px}.formactions button{flex:1}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:#fff5ec;border-radius:16px;padding:13px}.stat b{font-size:22px;display:block;color:var(--brown)}.stat small{color:var(--muted)}
+.smallbtn{border:0;background:none;color:var(--muted);font-size:18px;padding:4px}
+</style>
+</head>
+<body>
+<header><div class="top"><div><div class="eyebrow">your gentle planner</div><div class="brand">Daily Checker ☁️</div></div><div style="font-size:27px">🌷</div></div><div class="date" id="todayLabel"></div></header>
+<main>
+<section class="page active" id="home">
+<div class="hello">Hai, semangat hari ini! 🤎</div><div class="sub">Pelan-pelan juga tetap sebuah kemajuan.</div>
+<div class="card"><div class="progressrow"><div class="ring" id="ring"><b id="percent">0%</b></div><div><b>Progress hari ini</b><div class="muted" id="progressText">0 dari 0 kegiatan selesai</div><div class="muted" style="margin-top:5px">Kamu hebat sudah mulai ✨</div></div></div></div>
+<div class="sectionhead"><h2>Daily Activity</h2><button class="pill" onclick="openForm('activity')">＋ Tambah</button></div>
+<div class="days" id="days"></div><div class="card" id="activityList"></div>
+<div class="sectionhead"><h2>Routine Checker</h2><button class="pill" onclick="openForm('routine')">＋ Rutinitas</button></div>
+<div class="card" id="routineList"></div>
+</section>
+<section class="page" id="schedule"><div class="hello">Jadwal mingguan 📅</div><div class="sub">Setiap hari bisa punya kegiatan yang berbeda.</div><div class="days" id="days2"></div><div class="card" id="scheduleList"></div><button class="primary" onclick="openForm('activity')">＋ Tambah kegiatan</button></section>
+<section class="page" id="routine"><div class="hello">Kebiasaan baik 🌱</div><div class="sub">Bangun rutinitas kecil, satu hari demi satu hari.</div><div class="card" id="routineFull"></div><button class="primary" onclick="openForm('routine')">＋ Tambah rutinitas</button></section>
+<section class="page" id="progress"><div class="hello">Lihat progresmu ✨</div><div class="sub">Ringkasan berdasarkan catatan di perangkat ini.</div><div class="card stats" id="stats"></div><div class="card"><b>Catatan</b><p class="muted">Progress dihitung dari checklist yang kamu tandai selesai. Data tersimpan lokal di perangkat ini.</p></div></section>
+<section class="page" id="settings"><div class="hello">Pengaturan ⚙️</div><div class="card"><b>Pengingat kegiatan</b><p class="muted">Izinkan notifikasi browser agar pengingat dapat ditampilkan saat aplikasi terbuka. Alarm tepat waktu saat aplikasi tertutup belum dijamin oleh versi web ini.</p><button class="secondary" onclick="enableNotifications()">Aktifkan notifikasi</button></div><div class="card"><b>Data aplikasi</b><p class="muted">Semua jadwal dan rutinitas disimpan di browser pada HP ini.</p><button class="secondary" onclick="exportData()">Ekspor cadangan data</button> <button class="secondary" onclick="resetData()">Hapus semua data</button></div><div class="muted">Daily Checker · versi awal 1.0</div></section>
+</main>
+<button class="fab" id="fab" onclick="openForm('activity')">＋</button>
+<nav>
+<button class="active" data-page="home"><span>⌂</span>Home</button><button data-page="schedule"><span>▦</span>Jadwal</button><button data-page="routine"><span>♡</span>Routine</button><button data-page="progress"><span>◔</span>Progress</button><button data-page="settings"><span>⚙</span>Setelan</button>
+</nav>
+<script>
+const names=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'], short=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+const today=new Date();let selected=today.getDay();
+const key='daily-checker-v1';
+let data=JSON.parse(localStorage.getItem(key)||'null')||{activities:[],routines:[],checks:{}};
+const dateKey=()=>new Date().toISOString().slice(0,10);
+function save(){localStorage.setItem(key,JSON.stringify(data));render()}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function dayButtons(id){document.getElementById(id).innerHTML=short.map((d,i)=>`<button class="day ${i===selected?'active':''}" onclick="selected=${i};render()"><strong>${d}</strong>${i===today.getDay()?'•':''}</button>`).join('')}
+function activityDone(a){return !!data.checks[dateKey()+'_'+a.id]}
+function routineDone(r){return !!data.checks[dateKey()+'_r'+r.id]}
+function toggle(type,id){let k=dateKey()+'_'+(type==='r'?'r':'')+id;data.checks[k]=!data.checks[k];save()}
+function activityHTML(list){if(!list.length)return '<div class="empty">Belum ada kegiatan. Tambahkan aktivitas pertamamu 🌷</div>';return list.sort((a,b)=>a.time.localeCompare(b.time)).map(a=>`<div class="item ${activityDone(a)?'done':''}"><input class="check" type="checkbox" ${activityDone(a)?'checked':''} onchange="toggle('a',${a.id})"><div class="task"><div class="taskname">${esc(a.name)}</div><div class="taskmeta">${esc(a.note||'')}</div></div><span class="time">${a.time}</span><button class="smallbtn" onclick="removeItem('activities',${a.id})">×</button></div>`).join('')}
+function routineHTML(list){if(!list.length)return '<div class="empty">Belum ada rutinitas. Yuk mulai dari kebiasaan kecil 🌱</div>';return list.map(r=>`<div class="item ${routineDone(r)?'done':''}"><input class="check" type="checkbox" ${routineDone(r)?'checked':''} onchange="toggle('r',${r.id})"><div class="task"><div class="taskname">${esc(r.name)}</div><div class="taskmeta">Setiap hari · ${esc(r.note||'')}</div></div><span class="pill">${r.streak||0} ✦</span><button class="smallbtn" onclick="removeItem('routines',${r.id})">×</button></div>`).join('')}
+function render(){document.getElementById('todayLabel').textContent=today.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});dayButtons('days');dayButtons('days2');
+let acts=data.activities.filter(a=>a.day===selected);document.getElementById('activityList').innerHTML=activityHTML(acts);document.getElementById('scheduleList').innerHTML=activityHTML(acts);
+let routines=data.routines;document.getElementById('routineList').innerHTML=routineHTML(routines);document.getElementById('routineFull').innerHTML=routineHTML(routines);
+let all=acts.length+routines.length,done=acts.filter(activityDone).length+routines.filter(routineDone).length,p=all?Math.round(done/all*100):0;document.getElementById('ring').style.setProperty('--p',p+'%');document.getElementById('percent').textContent=p+'%';document.getElementById('progressText').textContent=`${done} dari ${all} kegiatan selesai`;
+document.getElementById('stats').innerHTML=`<div class="stat"><b>${done}</b><small>Selesai hari ini</small></div><div class="stat"><b>${all-done}</b><small>Belum selesai</small></div><div class="stat"><b>${p}%</b><small>Progress hari ini</small></div><div class="stat"><b>${data.routines.length}</b><small>Total rutinitas</small></div>`}
+function openForm(type){let isR=type==='routine';let form=document.createElement('div');form.style='position:fixed;inset:0;background:#3d2a2270;z-index:9;display:grid;place-items:end center;padding:12px';form.innerHTML=`<div class="card" style="width:min(100%,600px);margin:0;padding:20px"><div class="sectionhead"><h2>${isR?'Tambah rutinitas':'Tambah kegiatan'}</h2><button class="smallbtn" id="close">×</button></div><form id="entry"><label>Nama ${isR?'rutinitas':'kegiatan'}</label><input name="name" required maxlength="60" placeholder="${isR?'Contoh: Minum air putih':'Contoh: Belajar bahasa Inggris'}">${isR?'':'<label>Hari</label><select name="day">'+names.map((n,i)=>`<option value="${i}" ${i===selected?'selected':''}>${n}</option>`).join('')+'</select><label>Jam</label><input type="time" name="time" required value="08:00">'}<label>Catatan (opsional)</label><input name="note" maxlength="100" placeholder="Tambahkan catatan kecil"><div class="formactions"><button type="button" class="secondary" id="cancel">Batal</button><button class="primary">Simpan</button></div></form></div>`;document.body.append(form);const close=()=>form.remove();form.querySelector('#close').onclick=close;form.querySelector('#cancel').onclick=close;form.querySelector('form').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),item={id:Date.now(),name:f.get('name').trim(),note:f.get('note').trim()};if(isR)data.routines.push(item);else data.activities.push({...item,day:+f.get('day'),time:f.get('time')});close();save()}}
+function removeItem(type,id){if(confirm('Hapus item ini?')){data[type]=data[type].filter(x=>x.id!==id);save()}}
+function enableNotifications(){if(!('Notification'in window)){alert('Browser ini belum mendukung notifikasi.');return}Notification.requestPermission().then(p=>alert(p==='granted'?'Notifikasi diizinkan.':'Izin notifikasi belum diberikan.'))}
+function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='daily-checker-backup.json';a.click();URL.revokeObjectURL(a.href)}
+function resetData(){if(confirm('Yakin ingin menghapus semua jadwal, rutinitas, dan checklist?')){data={activities:[],routines:[],checks:{}};save()}}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===b.dataset.page));document.getElementById('fab').style.display=b.dataset.page==='home'||b.dataset.page==='schedule'?'block':'none'});
+if('serviceWorker'in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+render();
+</script></body></html>
