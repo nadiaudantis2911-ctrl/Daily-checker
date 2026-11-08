@@ -1,14 +1,14 @@
 {
   "id": "./",
-  "name": "Daily Checker",
+  "name": "Daily Activity Checker",
   "short_name": "Daily Checker",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#fff8f0",
-  "theme_color": "#fff4e9",
-  "description": "Planner harian dan routine checker offline.",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "description": "Planner aktivitas harian dengan tampilan putih dan peach.",
   "icons": [
     {
       "src": "./icons/icon-192.png",
